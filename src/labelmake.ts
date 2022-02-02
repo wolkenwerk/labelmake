@@ -17,7 +17,13 @@ import { barcodes } from "./constants"
 
 
 
-const labelmake = async ({ inputs, template, font, splitThreshold = 3 }: Args) => {
+const labelmake = async ({
+  inputs,
+  template,
+  font,
+  splitThreshold = 3,
+  metadata,
+}: Args) => {
   if (inputs.length < 1) {
     throw Error("inputs should be more than one length");
   }
@@ -222,9 +228,17 @@ const labelmake = async ({ inputs, template, font, splitThreshold = 3 }: Args) =
       }
     }
   }
-  const author = "labelmake (https://github.com/hand-dot/labelmake)";
-  pdfDoc.setProducer(author);
-  pdfDoc.setCreator(author);
+
+  metadata?.title && pdfDoc.setTitle(metadata.title);
+  metadata?.subject && pdfDoc.setSubject(metadata.subject);
+  metadata?.author && pdfDoc.setAuthor(metadata.author);
+  metadata?.creator && pdfDoc.setCreator(metadata.creator);
+  metadata?.producer && pdfDoc.setProducer(metadata.producer);
+  metadata?.language && pdfDoc.setLanguage(metadata.language);
+  metadata?.keywords && pdfDoc.setKeywords(metadata.keywords);
+  metadata?.creation_date && pdfDoc.setCreationDate(metadata.creation_date);
+  metadata?.modification_date &&
+    pdfDoc.setModificationDate(metadata.modification_date);
   return await pdfDoc.save();
 };
 

@@ -49,6 +49,17 @@ export interface Args {
   template: Template;
   font?: Font;
   splitThreshold?: number;
+  metadata?: {
+    title: string;
+    subject: string;
+    author: string;
+    creator: string;
+    producer: string;
+    language: string;
+    keywords: string[];
+    creation_date: Date;
+    modification_date: Date;
+  };
 }
 
 export const isPageSize = (
