@@ -62,12 +62,12 @@ var util_1 = require("./util");
 var type_1 = require("./type");
 var constants_1 = require("./constants");
 var labelmake = function (_a) {
-    var inputs = _a.inputs, template = _a.template, font = _a.font, _b = _a.splitThreshold, splitThreshold = _b === void 0 ? 3 : _b, metadata = _a.metadata;
+    var inputs = _a.inputs, template = _a.template, font = _a.font, _b = _a.splitThreshold, splitThreshold = _b === void 0 ? 3 : _b, metadata = _a.metadata, _c = _a.b64, b64 = _c === void 0 ? false : _c;
     return __awaiter(void 0, void 0, void 0, function () {
-        var fontNamesInSchemas, fontNames_1, pdfDoc, isUseMyfont, fontValues, _c, fontObj, _d, _e, inputImageCache, basePdf, schemas, isBlank, embeddedPages, embedPdfBoxes, embedPdf, embedPdfPages, boundingBoxes, transformationMatrices, i, inputObj, keys, _loop_1, j;
-        var _f;
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var fontNamesInSchemas, fontNames_1, pdfDoc, isUseMyfont, fontValues, _d, fontObj, _e, _f, inputImageCache, basePdf, schemas, isBlank, embeddedPages, embedPdfBoxes, embedPdf, embedPdfPages, boundingBoxes, transformationMatrices, i, inputObj, keys, _loop_1, j;
+        var _g;
+        return __generator(this, function (_h) {
+            switch (_h.label) {
                 case 0:
                     if (inputs.length < 1) {
                         throw Error("inputs should be more than one length");
@@ -89,7 +89,7 @@ var labelmake = function (_a) {
                     }
                     return [4 /*yield*/, pdf_lib_1.PDFDocument.create()];
                 case 1:
-                    pdfDoc = _g.sent();
+                    pdfDoc = _h.sent();
                     pdfDoc.registerFontkit(fontkit_1.default);
                     isUseMyfont = font && (template.fontName || fontNamesInSchemas.length > 0);
                     if (!isUseMyfont) return [3 /*break*/, 3];
@@ -99,29 +99,29 @@ var labelmake = function (_a) {
                             });
                         }))];
                 case 2:
-                    _c = _g.sent();
+                    _d = _h.sent();
                     return [3 /*break*/, 4];
                 case 3:
-                    _c = [];
-                    _g.label = 4;
+                    _d = [];
+                    _h.label = 4;
                 case 4:
-                    fontValues = _c;
+                    fontValues = _d;
                     if (!isUseMyfont) return [3 /*break*/, 5];
-                    _d = Object.keys(font).reduce(function (acc, cur, i) {
+                    _e = Object.keys(font).reduce(function (acc, cur, i) {
                         var _a;
                         return Object.assign(acc, (_a = {}, _a[cur] = fontValues[i], _a));
                     }, {});
                     return [3 /*break*/, 7];
                 case 5:
-                    _f = {};
-                    _e = pdf_lib_1.StandardFonts.Helvetica;
+                    _g = {};
+                    _f = pdf_lib_1.StandardFonts.Helvetica;
                     return [4 /*yield*/, pdfDoc.embedFont(pdf_lib_1.StandardFonts.Helvetica)];
                 case 6:
-                    _d = (_f[_e] = _g.sent(),
-                        _f);
-                    _g.label = 7;
+                    _e = (_g[_f] = _h.sent(),
+                        _g);
+                    _h.label = 7;
                 case 7:
-                    fontObj = _d;
+                    fontObj = _e;
                     inputImageCache = {};
                     basePdf = template.basePdf, schemas = template.schemas;
                     isBlank = (0, type_1.isPageSize)(basePdf);
@@ -130,7 +130,7 @@ var labelmake = function (_a) {
                     if (!!(0, type_1.isPageSize)(basePdf)) return [3 /*break*/, 10];
                     return [4 /*yield*/, pdf_lib_1.PDFDocument.load(basePdf)];
                 case 8:
-                    embedPdf = _g.sent();
+                    embedPdf = _h.sent();
                     embedPdfPages = embedPdf.getPages();
                     embedPdfBoxes = embedPdfPages.map(function (p) {
                         var mediaBox = p.getMediaBox();
@@ -145,19 +145,19 @@ var labelmake = function (_a) {
                     transformationMatrices = embedPdfPages.map(function () { return [1, 0, 0, 1, 0, 0]; });
                     return [4 /*yield*/, pdfDoc.embedPages(embedPdfPages, boundingBoxes, transformationMatrices)];
                 case 9:
-                    embeddedPages = _g.sent();
-                    _g.label = 10;
+                    embeddedPages = _h.sent();
+                    _h.label = 10;
                 case 10:
                     i = 0;
-                    _g.label = 11;
+                    _h.label = 11;
                 case 11:
                     if (!(i < inputs.length)) return [3 /*break*/, 16];
                     inputObj = inputs[i];
                     keys = Object.keys(inputObj);
                     _loop_1 = function (j) {
-                        var embeddedPage, pageWidth, pageHeight, page, _h, mb, bb, tb, _loop_2, l;
-                        return __generator(this, function (_j) {
-                            switch (_j.label) {
+                        var embeddedPage, pageWidth, pageHeight, page, _j, mb, bb, tb, _loop_2, l;
+                        return __generator(this, function (_k) {
+                            switch (_k.label) {
                                 case 0:
                                     embeddedPage = embeddedPages[j];
                                     pageWidth = (0, type_1.isPageSize)(basePdf)
@@ -169,7 +169,7 @@ var labelmake = function (_a) {
                                     page = pdfDoc.addPage([pageWidth, pageHeight]);
                                     if (!isBlank) {
                                         page.drawPage(embeddedPage);
-                                        _h = embedPdfBoxes[j], mb = _h.mediaBox, bb = _h.bleedBox, tb = _h.trimBox;
+                                        _j = embedPdfBoxes[j], mb = _j.mediaBox, bb = _j.bleedBox, tb = _j.trimBox;
                                         page.setMediaBox(mb.x, mb.y, mb.width, mb.height);
                                         page.setBleedBox(bb.x, bb.y, bb.width, bb.height);
                                         page.setTrimBox(tb.x, tb.y, tb.width, tb.height);
@@ -177,9 +177,9 @@ var labelmake = function (_a) {
                                     if (!schemas[j])
                                         return [2 /*return*/, "continue"];
                                     _loop_2 = function (l) {
-                                        var key, schema, input, rotate, boxWidth, boxHeight, _k, br, bg, bb, fontValue_1, _l, r_1, g_1, b_1, fontSize_1, alignment_1, lineHeight_1, characterSpacing_1, beforeLineOver_1, opt, inputImageCacheKey, image, isPng, imageBuf;
-                                        return __generator(this, function (_m) {
-                                            switch (_m.label) {
+                                        var key, schema, input, rotate, boxWidth, boxHeight, _l, br, bg, bb, fontValue_1, _m, r_1, g_1, b_1, fontSize_1, alignment_1, lineHeight_1, characterSpacing_1, beforeLineOver_1, opt, inputImageCacheKey, image, isPng, imageBuf;
+                                        return __generator(this, function (_o) {
+                                            switch (_o.label) {
                                                 case 0:
                                                     key = keys[l];
                                                     schema = schemas[j][key];
@@ -191,7 +191,7 @@ var labelmake = function (_a) {
                                                     boxHeight = (0, util_1.mm2pt)(schema.height);
                                                     if (!(schema.type === "text")) return [3 /*break*/, 1];
                                                     if (schema.backgroundColor) {
-                                                        _k = __read((0, util_1.hex2rgb)(schema.backgroundColor), 3), br = _k[0], bg = _k[1], bb = _k[2];
+                                                        _l = __read((0, util_1.hex2rgb)(schema.backgroundColor), 3), br = _l[0], bg = _l[1], bb = _l[2];
                                                         page.drawRectangle({
                                                             x: (0, util_1.calcX)(schema.position.x, "left", boxWidth, boxWidth),
                                                             y: (0, util_1.calcY)(schema.position.y, pageHeight, boxHeight),
@@ -203,7 +203,7 @@ var labelmake = function (_a) {
                                                     fontValue_1 = isUseMyfont
                                                         ? fontObj[schema.fontName ? schema.fontName : template.fontName]
                                                         : fontObj[pdf_lib_1.StandardFonts.Helvetica];
-                                                    _l = __read((0, util_1.hex2rgb)(schema.fontColor ? schema.fontColor : "#000"), 3), r_1 = _l[0], g_1 = _l[1], b_1 = _l[2];
+                                                    _m = __read((0, util_1.hex2rgb)(schema.fontColor ? schema.fontColor : "#000"), 3), r_1 = _m[0], g_1 = _m[1], b_1 = _m[2];
                                                     fontSize_1 = schema.fontSize ? schema.fontSize : 13;
                                                     alignment_1 = schema.alignment ? schema.alignment : "left";
                                                     lineHeight_1 = schema.lineHeight ? schema.lineHeight : 1;
@@ -214,7 +214,8 @@ var labelmake = function (_a) {
                                                     beforeLineOver_1 = 0;
                                                     input.split(/\r|\n|\r\n/g).forEach(function (inputLine, index) {
                                                         var isOverEval = function (testString) {
-                                                            var testStringWidth = fontValue_1.widthOfTextAtSize(testString, fontSize_1) + ((testString.length - 1) * characterSpacing_1);
+                                                            var testStringWidth = fontValue_1.widthOfTextAtSize(testString, fontSize_1) +
+                                                                (testString.length - 1) * characterSpacing_1;
                                                             /**
                                                              * split if the difference is less then two pixel
                                                              * (found out / tested this threshold heuristically, most probably widthOfTextAtSize is unprecise)
@@ -223,7 +224,8 @@ var labelmake = function (_a) {
                                                         };
                                                         var splitedLine = (0, util_1.getSplittedLines)(inputLine, isOverEval);
                                                         splitedLine.forEach(function (inputLine2, index2) {
-                                                            var textWidth = fontValue_1.widthOfTextAtSize(inputLine2, fontSize_1) + ((inputLine2.length - 1) * characterSpacing_1);
+                                                            var textWidth = fontValue_1.widthOfTextAtSize(inputLine2, fontSize_1) +
+                                                                (inputLine2.length - 1) * characterSpacing_1;
                                                             page.drawText(inputLine2, {
                                                                 x: (0, util_1.calcX)(schema.position.x, alignment_1, boxWidth, textWidth),
                                                                 y: (0, util_1.calcY)(schema.position.y, pageHeight, fontSize_1) -
@@ -257,7 +259,7 @@ var labelmake = function (_a) {
                                                     isPng = input.startsWith("data:image/png;");
                                                     return [4 /*yield*/, pdfDoc[isPng ? "embedPng" : "embedJpg"](input)];
                                                 case 2:
-                                                    image = _m.sent();
+                                                    image = _o.sent();
                                                     return [3 /*break*/, 6];
                                                 case 3:
                                                     if (!(!image && schema.type !== "image")) return [3 /*break*/, 6];
@@ -268,30 +270,30 @@ var labelmake = function (_a) {
                                                             input: input,
                                                         })];
                                                 case 4:
-                                                    imageBuf = _m.sent();
+                                                    imageBuf = _o.sent();
                                                     if (!imageBuf) return [3 /*break*/, 6];
                                                     return [4 /*yield*/, pdfDoc.embedPng(imageBuf)];
                                                 case 5:
-                                                    image = _m.sent();
-                                                    _m.label = 6;
+                                                    image = _o.sent();
+                                                    _o.label = 6;
                                                 case 6:
                                                     if (image) {
                                                         inputImageCache[inputImageCacheKey] = image;
                                                         page.drawImage(image, opt);
                                                     }
-                                                    _m.label = 7;
+                                                    _o.label = 7;
                                                 case 7: return [2 /*return*/];
                                             }
                                         });
                                     };
                                     l = 0;
-                                    _j.label = 1;
+                                    _k.label = 1;
                                 case 1:
                                     if (!(l < keys.length)) return [3 /*break*/, 4];
                                     return [5 /*yield**/, _loop_2(l)];
                                 case 2:
-                                    _j.sent();
-                                    _j.label = 3;
+                                    _k.sent();
+                                    _k.label = 3;
                                 case 3:
                                     l++;
                                     return [3 /*break*/, 1];
@@ -300,13 +302,13 @@ var labelmake = function (_a) {
                         });
                     };
                     j = 0;
-                    _g.label = 12;
+                    _h.label = 12;
                 case 12:
                     if (!(j < (isBlank ? schemas : embeddedPages).length)) return [3 /*break*/, 15];
                     return [5 /*yield**/, _loop_1(j)];
                 case 13:
-                    _g.sent();
-                    _g.label = 14;
+                    _h.sent();
+                    _h.label = 14;
                 case 14:
                     j++;
                     return [3 /*break*/, 12];
@@ -324,8 +326,11 @@ var labelmake = function (_a) {
                     (metadata === null || metadata === void 0 ? void 0 : metadata.creation_date) && pdfDoc.setCreationDate(metadata.creation_date);
                     (metadata === null || metadata === void 0 ? void 0 : metadata.modification_date) &&
                         pdfDoc.setModificationDate(metadata.modification_date);
-                    return [4 /*yield*/, pdfDoc.save()];
-                case 17: return [2 /*return*/, _g.sent()];
+                    if (!b64) return [3 /*break*/, 18];
+                    return [4 /*yield*/, pdfDoc.saveAsBase64()];
+                case 17: return [2 /*return*/, _h.sent()];
+                case 18: return [4 /*yield*/, pdfDoc.save()];
+                case 19: return [2 /*return*/, _h.sent()];
             }
         });
     });

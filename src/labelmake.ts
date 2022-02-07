@@ -23,6 +23,7 @@ const labelmake = async ({
   font,
   splitThreshold = 3,
   metadata,
+  b64 = false,
 }: Args) => {
   if (inputs.length < 1) {
     throw Error("inputs should be more than one length");
@@ -57,23 +58,23 @@ const labelmake = async ({
     font && (template.fontName || fontNamesInSchemas.length > 0);
   const fontValues = isUseMyfont
     ? await Promise.all(
-      Object.values(font!).map((v) =>
-        pdfDoc.embedFont(isSubsetFont(v) ? v.data : v, {
-          subset: isSubsetFont(v) ? v.subset : true,
-        })
+        Object.values(font!).map((v) =>
+          pdfDoc.embedFont(isSubsetFont(v) ? v.data : v, {
+            subset: isSubsetFont(v) ? v.subset : true,
+          })
+        )
       )
-    )
     : [];
   const fontObj = isUseMyfont
     ? Object.keys(font!).reduce(
-      (acc, cur, i) => Object.assign(acc, { [cur]: fontValues[i] }),
-      {} as { [key: string]: PDFFont }
-    )
+        (acc, cur, i) => Object.assign(acc, { [cur]: fontValues[i] }),
+        {} as { [key: string]: PDFFont }
+      )
     : {
-      [StandardFonts.Helvetica]: await pdfDoc.embedFont(
-        StandardFonts.Helvetica
-      ),
-    };
+        [StandardFonts.Helvetica]: await pdfDoc.embedFont(
+          StandardFonts.Helvetica
+        ),
+      };
 
   const inputImageCache: { [key: string]: PDFImage } = {};
   const { basePdf, schemas } = template;
@@ -163,22 +164,22 @@ const labelmake = async ({
 
           let beforeLineOver = 0;
 
-
           input.split(/\r|\n|\r\n/g).forEach((inputLine, index) => {
             const isOverEval = (testString: string) => {
-              const testStringWidth = fontValue.widthOfTextAtSize(testString, fontSize) + ((testString.length - 1) * characterSpacing)
+              const testStringWidth =
+                fontValue.widthOfTextAtSize(testString, fontSize) +
+                (testString.length - 1) * characterSpacing;
               /**
                * split if the difference is less then two pixel
                * (found out / tested this threshold heuristically, most probably widthOfTextAtSize is unprecise)
                */
               return boxWidth - testStringWidth <= splitThreshold;
-            }
+            };
             const splitedLine = getSplittedLines(inputLine, isOverEval);
             splitedLine.forEach((inputLine2, index2) => {
-              const textWidth = fontValue.widthOfTextAtSize(
-                inputLine2,
-                fontSize
-              ) + ((inputLine2.length - 1) * characterSpacing);
+              const textWidth =
+                fontValue.widthOfTextAtSize(inputLine2, fontSize) +
+                (inputLine2.length - 1) * characterSpacing;
               page.drawText(inputLine2, {
                 x: calcX(schema.position.x, alignment, boxWidth, textWidth),
                 y:
@@ -239,7 +240,12 @@ const labelmake = async ({
   metadata?.creation_date && pdfDoc.setCreationDate(metadata.creation_date);
   metadata?.modification_date &&
     pdfDoc.setModificationDate(metadata.modification_date);
-  return await pdfDoc.save();
+
+  if(b64) {
+    return await pdfDoc.saveAsBase64();
+  } else {
+    return await pdfDoc.save();
+  }
 };
 
 export default labelmake;

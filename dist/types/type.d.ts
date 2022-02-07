@@ -47,6 +47,7 @@ export interface Args {
         creation_date: Date;
         modification_date: Date;
     };
+    b64: boolean;
 }
 export declare const isPageSize: (args: PageSize | string | Uint8Array | ArrayBuffer) => args is PageSize;
 export declare const isSubsetFont: (v: string | Uint8Array | ArrayBuffer | SubsetFont) => v is SubsetFont;

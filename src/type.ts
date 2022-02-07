@@ -60,6 +60,7 @@ export interface Args {
     creation_date: Date;
     modification_date: Date;
   };
+  b64: boolean;
 }
 
 export const isPageSize = (
